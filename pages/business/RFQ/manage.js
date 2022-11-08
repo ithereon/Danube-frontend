@@ -1,0 +1,186 @@
+import React, {useCallback, useEffect, useState} from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { requestWithTokenAsync } from '../../../lib/axios';
+import { perPageLimit } from '../../../lib/constants';
+
+// layout for page
+import Admin from '../../../layouts/Admin';
+import { WithTransition } from '../../../components/wrappers/withTransition';
+
+// components
+import { SubHeader } from '../../../components/subHeader';
+import StyledModal from '../../../components/UI/styledModal';
+import { BorderButton } from '../../../components/UI/borderButton';
+import ListContainer from '../../../components/lists/listContainer';
+import ListItem from '../../../components/lists/listItem';
+
+const ManageRFQs = ({token, role}) => {
+	const router = useRouter();
+	const currentPath = router.pathname;
+	const currentQuery = {...router.query};
+	const {p = 1, search} = router.query;
+
+	const [data,setData] = useState([]);
+	const [count, setCount] = useState();
+	// const [message, setMessage] = useState();
+
+	const [open, setOpen] = useState({state: false, id: ''});
+
+	const [deleting, setDeleting] = useState(false);
+	const [loading, setLoading] = useState(true);
+
+	const fetchData = async (p, keyword) => {
+		setLoading(true);
+		const res = await requestWithTokenAsync(
+			'get',
+			`/rfq_business/getopenorprivate/?status=PRIVATE&search=${keyword ? keyword : ''}&limit=${perPageLimit}&offset=${(Number(p)-1)*perPageLimit}`,
+			token
+		);
+		if(res?.data?.results && res.data.results.length > 0){
+			const modifiedData = res.data.results.map(item=>({
+				title: item.rfq.title,
+				subTitle: 'Sent from '+item.owner_name,
+				id: item.id,
+				status: item.status.toLowerCase(),
+				property: {
+					postcode: item.rfq.property?.postcode,
+				},
+				rfq_items: item.rfq.rfq_items,
+				rfqID: item.rfq.id
+			}));
+			setData(modifiedData);
+			setCount(res.data.count);
+		}else{
+			setData('No data');
+		}
+		setLoading(false);
+	};
+
+	useEffect(() => {
+		fetchData(p, search);
+	}, [p, search]);
+
+	const searchHandler = useCallback(async (keyword) => {
+		if(currentQuery.search !== keyword){
+			currentQuery.search = keyword; 
+			router.push({
+				pathname: currentPath,
+				query: currentQuery,
+			});
+		}else{
+			fetchData(keyword);
+		}		
+	},[]);
+
+	const deleteHandler = async () => {
+		setDeleting(true);
+		const res = await requestWithTokenAsync(
+			'post',
+			`/rfq_business/${open.id}/decline/`,
+			token
+		);
+		if(res?.data === 'RFQ request for business was declined.'){
+			handleToggle();
+			fetchData();
+		}
+		setDeleting(false);
+	};
+
+	const handleToggle = () => {
+		setOpen(prev=>({...prev, state: !prev.state}));
+	};
+
+	return (
+		<div className='md:container mx-auto pb-8 mb-6 flex flex-wrap items-stretch'>
+			<WithTransition>
+				<StyledModal
+					open={open.state}
+					onClose={handleToggle}
+					aria-labelledby="delete RFQ"
+				>
+					<p className='text-neutral-700'>
+						{`Are you sure you want to decline RFQ with ID of ${open.id}?`}
+					</p>
+					<div className='flex items-center justify-between flex-wrap pt-8'>
+						<BorderButton
+							clicked={handleToggle}
+							colorStyles='text-neutral-500 border-neutral-500 hover:bg-neutral-500 active:bg-neutral-600 focus:shadow-neutral-600'
+						>
+							Cancel
+						</BorderButton>
+						<BorderButton
+							withLoader={deleting}
+							clicked={deleteHandler}
+							colorStyles='text-red-500 border-red-500 hover:bg-red-500 active:bg-red-600 focus:shadow-red-600'
+						>
+							decline
+						</BorderButton>
+					</div>
+				</StyledModal>
+				<SubHeader>
+					Requests for Quotation
+				</SubHeader>
+				<div className='px-4'>
+					<div className="relative flex flex-col min-w-0 break-words w-full h-full shadow-lg rounded-lg bg-slate-50 border-0">
+						<ListContainer 
+							router={router}
+							count={count ? Math.ceil(count/perPageLimit) : 1}
+							title="Your RFQs"
+							loading={loading}
+							hasData={data && typeof data !== 'string' }
+							onSearch={searchHandler}
+						>
+							{typeof data !== 'string' && data?.length > 0 && data.map(item=>(
+								<div key={item.id} className='w-full lg:w-1/3 md:w-1/2 inline-block'>
+									<ListItem
+										item={item} 
+										shortTitle="true"
+										status={item.status}
+										editLink={`/${role}/RFQ/edit?id=${item.id}`}
+										viewLink={`/${role}/RFQ?id=${item.id}`}
+										actions={
+											<ul>
+												<li>
+													<Link href={`/${role}/RFQ?id=${item.id}`}>
+														<a className='py-2 px-4 block  capitalize text-left hover:bg-blue-200 focus:bg-blue-200 focus:outline-none'>
+															view
+														</a>
+													</Link>
+												</li>
+												{item.status === 'waiting' && (
+													<li>
+														<Link href={`/${role}/EOI/create?id=${item.rfqID}`}>
+															<a className='py-2 px-4 block w-full capitalize text-left hover:bg-blue-200 focus:bg-blue-200 focus:outline-none'>
+																express interest
+															</a>
+														</Link>
+													</li>
+												)}
+												{item.status === 'waiting' && (
+													<li>
+														<button 
+															className='py-2 px-4 block w-full capitalize text-left hover:bg-blue-200 focus:bg-blue-200 focus:outline-none' 
+															onClick={()=>setOpen({state: true, id: item.id})}
+														>
+															decline
+														</button>
+													</li>
+												)}
+											</ul>
+										} 
+									/>
+								</div>
+							))}
+						</ListContainer>
+					</div>
+				</div>
+
+			</WithTransition>
+		</div>
+	);
+};
+export default ManageRFQs;
+
+ManageRFQs.auth = true;
+ManageRFQs.layout = Admin;

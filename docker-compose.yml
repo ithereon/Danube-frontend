@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: "yarn dev"
+    working_dir: /usr/app/
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/app
+      - /usr/app/node_modules/
+      - /usr/app/.next/
+    environment:
+      - REACT_APP_BASE_URL=https://danube-backend.herokuapp.com/
+      - NEXTAUTH_URL=http://localhost:3000/
+      - SECRET_TOKEN=hello
+      - SECRET_PHRASE=secretPassphrase
+      - CURRENT_ENV=development
+      - RECAPTCHA_SITE_KEY=6Ld-_8kiAAAAAH5H1KR9BATEm8dN5v6Mdhdg6LIo

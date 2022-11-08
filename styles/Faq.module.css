@@ -1,0 +1,18 @@
+.accordionDesc {
+  @apply border-neutral-200 border-t border-solid text-sm font-normal text-neutral-600;
+}
+.accordionDesc ul,
+.accordionDesc ol {
+  @apply list-none pl-4 py-4;
+}
+.accordionDesc ul li,
+.accordionDesc ol li {
+  @apply font-normal leading-5;
+}
+.accordionDesc ul li::before, 
+.accordionDesc ol li::before {
+  @apply content-["\2022"] text-rose-400 text-lg font-bold inline-block w-4 -ml-4;
+}
+.accordionDesc strong {
+  @apply font-semibold text-neutral-600;
+}
