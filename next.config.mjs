@@ -14,7 +14,7 @@ const nextConfig = {
 	swcMinify: false,
 	headers: securityHeaders,
 	env: {
-		REACT_APP_BASE_URL: 'https://danube-backend.herokuapp.com',
+		REACT_APP_BASE_URL: 'https://live-production-backend.herokuapp.com',
 		// REACT_APP_BASE_URL: 'http://127.0.0.1:8000',
 		NEXTAUTH_URL: 'http://127.0.0.1:3000',
 		SECRET_TOKEN: 'hello',
