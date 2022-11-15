@@ -49,7 +49,8 @@ const StyledDropdown = (props) => {
 							onClick={(e) => {
 								e.preventDefault();
 								signOut({
-									callbackUrl: '/auth/login'
+									// callbackUrl: '/auth/login'
+									callbackUrl: `${window.location.origin}`,
 								});
 							}}
 						>
