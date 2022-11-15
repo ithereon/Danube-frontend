@@ -94,7 +94,8 @@ export default function UserDropdown(props) {
 				</MenuItem>
 				<MenuItem
 					sx={{'&:hover': {color: 'white',backgroundColor: '#6366f1'}}}
-					onClick={(e) => {e.preventDefault();signOut({callbackUrl: 'https://live-production-frontend.herokuapp.com/auth/login'});}}>
+					// onClick={(e) => {e.preventDefault();signOut({callbackUrl: '/auth/login'});}}>
+					onClick={(e) => {e.preventDefault();signOut();}}>
 					<ListItemIcon>
 						<Logout fontSize="small" />
 					</ListItemIcon>
