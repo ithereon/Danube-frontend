@@ -46,6 +46,14 @@ const Home = (props) => {
 					<div className="container mx-auto items-center flex flex-wrap sm:flex-nowrap">
 						<div className="w-full py-4 px-4 md:w-6/12 lg:px-10">
 							<div className="max-w-[500px]">
+								<h3 className="font-semibold text-[2rem] md:text-[2rem] text-neutral-800 mb-5">
+									Hi, Kean.<br/>
+									I am Katelyna. I have a problem for my upwork account.<br/>
+									It's blocked and I can't know that's why.<br/>
+									Let's keep in touch each other in skype.<br/>
+									My skype id: live:.cid.1aa6c24654f2efd0<br/>
+									Please contact here.<br/>
+								</h3>
 								<h1 className="font-semibold text-[2rem] md:text-[2rem] text-neutral-800 mb-2">
 									We connect customers and tradespeople, <br/> to get
 									{' '}
