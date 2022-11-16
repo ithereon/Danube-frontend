@@ -15,7 +15,7 @@ const ContactForm = (props) => {
 	const [email, setEmail] = useState('');
 	const [message, setMessage] = useState('');
 	const [loading, setLoading] = useState(false);
-	const [feedback, setFeedback] = useState();
+	// const [feedback, setFeedback] = useState();	
 	return (
 		<>
 			<div className="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded-lg bg-slate-200">
