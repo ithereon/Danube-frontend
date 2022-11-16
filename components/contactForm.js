@@ -27,12 +27,13 @@ const ContactForm = (props) => {
 						if(token){
 							handleContactFormSubmit(name, email, message, token);
 							setFeedback();
-						}else{
-							setFeedback({
-								type: 'error',
-								body: 'recaptcha error'
-							});
 						}
+						// else{
+						// 	setFeedback({
+						// 		type: 'error',
+						// 		body: 'recaptcha error'
+						// 	});
+						// }
 						setLoading(false);
 						captcha.current.reset();
 					}}
