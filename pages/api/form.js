@@ -1,4 +1,3 @@
-import React, {useState} from 'react';
 import { postDataAsync } from '../../lib/axios';
 
 const handleContactFormSubmit = async (firstName, lastName, email, message, token) => {
@@ -10,7 +9,7 @@ const handleContactFormSubmit = async (firstName, lastName, email, message, toke
 		token
 	};
 	console.log(data);
-	
+
 	const res = await postDataAsync('/contact_msg', {
 		name: data.firstName + data.lastName,
 		email: data.email,
