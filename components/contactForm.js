@@ -17,6 +17,8 @@ const ContactForm = (props) => {
 	const [message, setMessage] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [feedback, setFeedback] = useState();	
+
+	console.log(siteKey)
 	return (
 		<>
 			<div className="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded-lg bg-slate-200">
