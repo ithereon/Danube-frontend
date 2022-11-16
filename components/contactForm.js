@@ -24,10 +24,11 @@ const ContactForm = (props) => {
 						e.preventDefault();
 						setLoading(true);
 						const token = captcha.current.getValue();
-						if(token){
-							handleContactFormSubmit(name, email, message, token);
-							setFeedback();
-						}
+						handleContactFormSubmit(name, email, message, token);
+						// if(token){
+						// 	handleContactFormSubmit(name, email, message, token);
+						// 	setFeedback();
+						// }
 						// else{
 						// 	setFeedback({
 						// 		type: 'error',
