@@ -18,9 +18,9 @@ const handleContactFormSubmit = async (firstName, lastName, email, message, toke
 	});
 
 	if(res?.data?.status === 'OK') {
-		return true
+		return true;
 	}else {
-		return false
+		return false;
 	}
 };
 
