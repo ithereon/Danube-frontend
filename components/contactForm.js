@@ -11,7 +11,8 @@ import Feedback from './UI/feedback';
 const ContactForm = (props) => {
 	const captcha = useRef();
 	const siteKey = process.env.RECAPTCHA_SITE_KEY;
-	const [name, setName] = useState('');
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
 	const [email, setEmail] = useState('');
 	const [message, setMessage] = useState('');
 	const [loading, setLoading] = useState(false);
@@ -24,18 +25,18 @@ const ContactForm = (props) => {
 						e.preventDefault();
 						setLoading(true);
 						const token = captcha.current.getValue();
-						handleContactFormSubmit(name, email, message, token);
-						setFeedback();
-						// if(token){
-						// 	handleContactFormSubmit(name, email, message, token);
-						// 	setFeedback();
-						// }
-						// else{
-						// 	setFeedback({
-						// 		type: 'error',
-						// 		body: 'recaptcha error'
-						// 	});
-						// }
+						// handleContactFormSubmit(name, email, message, token);
+						// setFeedback();
+						if(token){
+							handleContactFormSubmit(firstName, lastName, email, message, token);
+							setFeedback();
+						}
+						else{
+							setFeedback({
+								type: 'error',
+								body: 'recaptcha error'
+							});
+						}
 						setLoading(false);
 						captcha.current.reset();
 					}}
@@ -53,7 +54,7 @@ const ContactForm = (props) => {
 									label="First Name"
 									placeholder="First Name"
 									required
-									onChange={e => setName(e.target.value)}
+									onChange={e => setFirstName(e.target.value)}
 								/>
 							</div>
 
@@ -73,7 +74,7 @@ const ContactForm = (props) => {
 									label="Last Name"
 									placeholder="Last Name"
 									required
-									onChange={e => setName(e.target.value)}
+									onChange={e => setLastName(e.target.value)}
 								/>
 							</div>
 
